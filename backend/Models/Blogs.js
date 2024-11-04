@@ -8,9 +8,6 @@ required:true,
 type:String,
 required:true,
     },
-// createdBy:{
-//     type:
-// }
 })
 const Blog = mongoose.model('blog',BlogSchema);
 module.exports = User;

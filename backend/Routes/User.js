@@ -1,6 +1,7 @@
 const express = require('express')
+const {verifyToken,generateToken}=require('../Middleware/auth')
 const router = express.Router();
-const User = require('../Models/User')
+const User = require('../Models/User');
 router.get('/signin',(req,res)=>{
 res.render('signin')
 })
@@ -9,36 +10,33 @@ res.render('signup')
 })
 router.post('/signup',async(req,res)=>{
 const {name,email,password} = req.body;
-if(!email || !name ||!password){
-    return res.status(204).send({error:"Input all fields"})
-}
+const user= await User.findOne({email})
+if(user){throw new Error("already signed up with this email")}
+console.log(req.body)
 try {
     const user = await User.create({
         name,
         email,
         password,
     })
-    if(user)res.status(200).send('Success');
+ if(user){res.send('Success user created')}
 } catch (error) {
-    res.send(error, "error occurred")
+    res.send( error)
 }
 })
 router.post('/signin',async(req,res)=>{
     const {email,password} = req.body;
-if(!email  ||!password){
-    return res.status(204).send({error:"Input all fields"})
+if(!email  || !password){
+    return res.send("Input all fields")
 }
 try {
-    const user = await User.findOne({
-        email
-    })
-    if(user)
-        {
-            if(user.password===password)
-            res.status(200).send('Success');
-        }else{res.send({error:"invalid credentils"})}
-} catch (error) {
-    res.send({error: "error occurred"})
-}
-})
+    const token = await User.matchPassword(email,password)
+     if(token){
+        return res.cookie('token',token).redirect('/')
+  }
+ else  return  res.render('signin')
+}catch (error) {
+    return res.send(error)
+ }
+} )
 module.exports = router;
