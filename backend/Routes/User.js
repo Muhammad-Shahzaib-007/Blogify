@@ -40,7 +40,7 @@ router.post("/signup", async (req, res) => {
     res.send(error);
   }
 });
-router.post("/signin", async (req, res) => {
+router.post("/signin", async (req,res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.send("Input all fields");
@@ -55,5 +55,8 @@ router.post("/signin", async (req, res) => {
     return res.json(error.message);
   }
 });
+router.get('/logout',(req,res)=>{
+ return res.clearCookie('token').redirect('/'); 
+})
 // router.post('/updatePass',())
 module.exports = router;

@@ -4,9 +4,8 @@
     <%-include('./partials/navbar') %>
     <% if (locals.blogs) { %>
     <%-include('./partials/BlogCard') %>
-    <% } %> 
-  <% if (user) { %>
-    <%= user.name %>
-  <% } %>
+    <% } %>
+    
+    <%-include('./partials/scripts') %>
 </body>
 </html>

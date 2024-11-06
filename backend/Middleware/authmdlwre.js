@@ -10,7 +10,7 @@ let user = verifyToken(cookie)
    user=JSON.stringify(user.payload);
 if(user){
   req.user=user;
-  req.user=JSON.parse(req.user);
+  req.user = JSON.parse(req.user);
   return next();
 }
 else return res.render('signin');

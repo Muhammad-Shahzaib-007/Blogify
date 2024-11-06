@@ -12,9 +12,10 @@ const BlogRoute = require('./Routes/Blog')
 const port =process.env.PORt || 4000
 app.use(cors({origin:"http://localhost:3000"}))
 app.use(cookieParser())
-app.use(checkAuth())
+
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
+app.use(checkAuth())
 // app.use(checkAuth())
 app.set('view engine','ejs');
 app.set('views',path.resolve('views'))
@@ -31,7 +32,11 @@ app.get('/',async(req,res)=>{
         user:req.user,
         blogs:blogs
     });
-
+})
+app.get('/blogs/add',(req,res)=>{
+    res.render('addBlog',{
+        user:req.user,
+    })
 })
 app.listen(port,()=>{
     console.log(`Server started ${port}`)

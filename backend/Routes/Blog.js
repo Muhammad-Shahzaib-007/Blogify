@@ -6,9 +6,7 @@ const cloudinary = require('../Controllers/Upload/cloudinary');
 router.get('/',async(req,res)=>{
     
 })
-router.get('/add',(req,res)=>{
-    res.render('addBlog')
-})
+
 router.post('/add',upload.single('image'),async(req,res)=>{
     const {title,description} = req.body;
     let imgURL;
@@ -26,12 +24,12 @@ const blog = await Blog.create({
     description:description,
     createdBy:req.user._id,
     imageURL:imgURL,
-    createdBy:req.user,    
+    createdBy:req.user,
 })
 return res.redirect('/');
     } catch (error) {
       return  res.json(error)
     }
-
 })
+
 module.exports = router;
