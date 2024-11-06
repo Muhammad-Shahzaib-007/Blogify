@@ -8,6 +8,13 @@ required:true,
 type:String,
 required:true,
     },
+    imageURL:{
+        type:String,
+    },
+    createdBy:{
+        type:mongoose.SchemaTypes.ObjectId,
+        ref:'user',
+    }
 })
 const Blog = mongoose.model('blog',BlogSchema);
-module.exports = User;
+module.exports = Blog;

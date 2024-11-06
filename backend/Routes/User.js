@@ -8,6 +8,9 @@ res.render('signin')
 router.get('/signup',(req,res)=>{
 res.render('signup')
 })
+router.get('/updatePass',(req,res)=>{
+    res.render('signup')
+    })
 router.post('/signup',async(req,res)=>{
 const {name,email,password} = req.body;
 const user= await User.findOne({email})
@@ -31,12 +34,14 @@ if(!email  || !password){
 }
 try {
     const token = await User.matchPassword(email,password)
-     if(token){
+    if(token){   
+      const user = verifyToken(token)
         return res.cookie('token',token).redirect('/')
   }
  else  return  res.render('signin')
 }catch (error) {
-    return res.send(error)
+    return res.json(error.message)
  }
-} )
+})
+// router.post('/updatePass',())
 module.exports = router;

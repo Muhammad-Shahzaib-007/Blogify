@@ -1,13 +1,16 @@
+require('dotenv').config();
+const Blog = require('./Models/Blogs')
+const cors = require('cors')
 const express = require('express')
 const app = express();
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const path = require('path')
 const { checkAuth } = require('./Middleware/authmdlwre');
-
 const userRoute = require('./Routes/User');
-
-const port = 3000
+const BlogRoute = require('./Routes/Blog')
+const port =process.env.PORt || 4000
+app.use(cors({origin:"http://localhost:3000"}))
 app.use(cookieParser())
 app.use(checkAuth())
 app.use(express.json())
@@ -20,8 +23,15 @@ mongoose.connect('mongodb://localhost:27017/BlogifyG').then(()=>{
     console.log('Mongo DB connected')
 })
 app.use('/users',userRoute)
-app.get('/',(req,res)=>{
-    res.render('home');
+app.use('/blogs',BlogRoute)
+app.get('/',async(req,res)=>{
+  console.log(req.user)
+  const blogs =await Blog.find({})
+    res.render('home',{
+        user:req.user,
+        blogs:blogs
+    });
+
 })
 app.listen(port,()=>{
     console.log(`Server started ${port}`)

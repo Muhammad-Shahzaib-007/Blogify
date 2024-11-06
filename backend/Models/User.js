@@ -17,6 +17,9 @@ required:true,
     salt:{
 type:String,
 required:false,
+    },
+    profileImageURL:{
+        type:String,
     }
 })
 UserSchema.pre('save',async function(next){
@@ -34,8 +37,7 @@ UserSchema.static('matchPassword',async function(email,password){
     if(!user){return false}
     const hashedPassword =await  createHmac('sha256',salt).update(password).digest('hex');
     if(hashedPassword===hashed){
-     const token =generateToken(user)
-    return token;
+     return generateToken(user)
     }
     return false;
 })
