@@ -1,3 +1,4 @@
+const {sendM}=require('../Controllers/nodemailer')
 const express = require('express')
 const {verifyToken,generateToken}=require('../Middleware/auth')
 const router = express.Router();
@@ -22,7 +23,16 @@ try {
         email,
         password,
     })
- if(user){res.send('Success user created')}
+    
+ if(user){
+    const emailOpts ={
+        from:"mshizzi141@gmail.com",
+        to:user.email,
+        subject:"Login Success",
+text:`Congratualation ${user.name} you have successfully signed up in this site`
+    }
+    sendM(emailOpts)
+return res.status(200).redirect('/users/signin')}
 } catch (error) {
     res.send( error)
 }
